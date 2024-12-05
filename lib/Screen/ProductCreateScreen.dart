@@ -17,7 +17,7 @@ class _ProductcreatescreenState extends State<Productcreatescreen> {
       appBar: AppBar(
         backgroundColor:colorWhite,
         title: Text("Create Product",
-            style: GoogleFonts.lato(fontSize: 27, fontWeight: FontWeight.w400)),
+            style: GoogleFonts.lato(fontSize: 28, fontWeight: FontWeight.w400)),
         //titleTextStyle: const TextStyle(color:Colors.white,fontSize: 24,fontWeight: FontWeight.w400),
       ),
       body: Stack(
