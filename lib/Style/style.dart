@@ -10,7 +10,7 @@ const colorDarkBlue = Color.fromRGBO(44, 62, 80, 1);
 
 ScreenBackground(context) {
   return SvgPicture.asset(
-    "SVG_Background.svg",
+    "assets/images/SVG_Background.svg",
     alignment: Alignment.center,
     height: MediaQuery.of(context).size.height,
     width: MediaQuery.of(context).size.width,
