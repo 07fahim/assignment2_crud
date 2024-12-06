@@ -80,7 +80,7 @@ class _ProductcreatescreenState extends State<Productcreatescreen> {
                     Container(
                       child: ElevatedButton(
                           style: AppButtonStyle(),
-                          onPressed: (){}, child:Text("Submit")),
+                          onPressed: (){}, child:EleButtonChild("Submit")),
                     ),
 
 

@@ -29,12 +29,12 @@ InputDecoration AddInputDecoration(label) {
         borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(color: colorBlue, width: 2)),
     labelText: label,
-    labelStyle:GoogleFonts.merriweather(color: colorGrey, fontSize:20),
+    labelStyle: GoogleFonts.merriweather(color: colorGrey, fontSize: 20),
     fillColor: Colors.white,
     filled: true,
     contentPadding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
     hintText: label,
-    hintStyle:GoogleFonts.merriweather(color: colorBlue),
+    hintStyle: GoogleFonts.merriweather(color: colorBlue),
   );
 }
 
@@ -52,11 +52,30 @@ DecoratedBox AppDropDownStyle(child) {
   );
 }
 
-ButtonStyle AppButtonStyle(){
+ButtonStyle AppButtonStyle() {
   return ElevatedButton.styleFrom(
-    backgroundColor:Colors.transparent,
-    elevation: 1,
-    padding: EdgeInsets.all(0),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6))
+      backgroundColor: Colors.transparent,
+      elevation: 1,
+      padding: EdgeInsets.all(0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)));
+}
+
+Ink EleButtonChild(ButtonText) {
+  return Ink(
+    decoration: BoxDecoration(
+      color: colorBlue,
+      borderRadius: BorderRadius.circular(6),
+    ),
+    child: Container(
+        height: 45,
+        alignment: Alignment.center,
+        child: Text(
+          ButtonText,
+          style: GoogleFonts.firaSans(
+            fontSize:24,
+            fontWeight: FontWeight.w800,
+            color: colorWhite
+          ),
+        )),
   );
 }
