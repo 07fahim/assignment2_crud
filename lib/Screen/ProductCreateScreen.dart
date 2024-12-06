@@ -53,6 +53,37 @@ class _ProductcreatescreenState extends State<Productcreatescreen> {
                       decoration: AddInputDecoration("Total Price"),
                     ),
                     const SizedBox(height: 20),
+
+                    AppDropDownStyle(
+                        DropdownButton(style:GoogleFonts.merriweather(
+                          color: colorGrey,fontSize: 20
+
+                        ),
+                          dropdownColor:colorWhite,
+                            value: "",
+                            items:
+                    const [
+                      DropdownMenuItem(child:Text("Select QT") ,value: "",),
+                      DropdownMenuItem(child:Text("1 piece") ,value: "1 piece",),
+                      DropdownMenuItem(child:Text("2 piece") ,value: "2 piece",),
+                      DropdownMenuItem(child:Text("3 piece") ,value: "3 piece",),
+                      DropdownMenuItem(child:Text("4 piece") ,value: " 4 piece",),
+                      DropdownMenuItem(child:Text("5 piece") ,value: "5 piece",),
+
+                    ]
+                        , onChanged: (value){},
+                        isExpanded: true,
+                          underline:Container(),
+                        )),
+                    const SizedBox(height: 20),
+
+                    Container(
+                      child: ElevatedButton(
+                          style: AppButtonStyle(),
+                          onPressed: (){}, child:Text("Submit")),
+                    ),
+
+
                   ],
                 )),
           )
