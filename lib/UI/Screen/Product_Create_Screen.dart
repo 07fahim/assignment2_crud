@@ -211,8 +211,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                   _showMessage('Please select quantity');
                   return;
                 }
-                // Add your form submission logic here
-                print('Please select quantity');
+
               },
               child: EleButtonChild("Create Product"),
             ),
