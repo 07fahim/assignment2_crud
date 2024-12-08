@@ -21,6 +21,9 @@ ScreenBackground(context) {
 
 InputDecoration AddInputDecoration(label) {
   return InputDecoration(
+    border:OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: colorBlue, width: 2)),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: const BorderSide(color: colorWhite, width: 0),
