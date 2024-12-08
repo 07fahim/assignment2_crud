@@ -26,7 +26,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(color: Colors.white,fontWeight: FontW),
+          style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
         ),
         backgroundColor:colorDarkBlue,
         duration: const Duration(seconds: 2),
