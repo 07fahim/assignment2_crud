@@ -15,7 +15,70 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
   final TextEditingController _imageTEController = TextEditingController();
   final TextEditingController _priceTEController = TextEditingController();
   final TextEditingController _totalPriceTEController = TextEditingController();
+  final TextEditingController _customQtyController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  String? selectedQuantity;
+  List<String> quantityItems = ["1 piece", "2 piece", "3 piece", "4 piece", "5 piece", "custom"];
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white,fontWeight: FontW),
+        ),
+        backgroundColor:colorDarkBlue,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _showCustomQuantityDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Enter Custom Quantity',
+            style: GoogleFonts.roboto(fontSize: 20),
+          ),
+          content: TextField(
+            controller: _customQtyController,
+            keyboardType: TextInputType.number,
+            decoration: AddInputDecoration("Enter quantity"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                setState(() {
+                  selectedQuantity = null;
+                });
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_customQtyController.text.isNotEmpty) {
+                  setState(() {
+                    String newQuantity = "${_customQtyController.text} piece";
+                    if (!quantityItems.contains(newQuantity)) {
+                      quantityItems.add(newQuantity);
+                    }
+                    selectedQuantity = newQuantity;
+                    _customQtyController.clear();
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +90,48 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           style: GoogleFonts.lato(fontSize: 28, fontWeight: FontWeight.w400),
         ),
         centerTitle: true,
-        //titleTextStyle: const TextStyle(color:Colors.white,fontSize: 24,fontWeight: FontWeight.w400),
       ),
       body: Stack(
         children: [
           ScreenBackground(context),
           Container(
             child: SingleChildScrollView(
-                padding: const EdgeInsets.all(30), child: _buildProductForm()),
+              padding: const EdgeInsets.all(30),
+              child: _buildProductForm(),
+            ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildQuantityDropdown() {
+    return AppDropDownStyle(
+      DropdownButton<String>(
+        style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20),
+        dropdownColor: colorWhite,
+        value: selectedQuantity,
+        hint: Text(
+            "Select QT",
+            style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20)
+        ),
+        items: quantityItems.map((String qty) {
+          return DropdownMenuItem(
+            value: qty,
+            child: Text(qty),
+          );
+        }).toList(),
+        onChanged: (value) {
+          setState(() {
+            if (value == "custom") {
+              _showCustomQuantityDialog();
+            } else {
+              selectedQuantity = value;
+            }
+          });
+        },
+        isExpanded: true,
+        underline: Container(),
       ),
     );
   }
@@ -47,12 +142,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       child: Column(
         children: [
           TextFormField(
-            style: GoogleFonts.roboto(
-              fontSize: 24,
-            ),
             controller: _nameTEController,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: (value) {},
             decoration: AddInputDecoration("Product Name"),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
@@ -63,28 +153,18 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            style: GoogleFonts.roboto(
-              fontSize: 24,
-            ),
             controller: _codeTEController,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: (value) {},
             decoration: AddInputDecoration("Product Code"),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
-                return "Enter product name";
+                return "Enter product code";
               }
               return null;
             },
           ),
           const SizedBox(height: 20),
           TextFormField(
-            style: GoogleFonts.roboto(
-              fontSize: 24,
-            ),
             controller: _imageTEController,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: (value) {},
             decoration: AddInputDecoration("Product Image"),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
@@ -95,13 +175,8 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            style: GoogleFonts.roboto(
-              fontSize: 24,
-            ),
             controller: _priceTEController,
             keyboardType: TextInputType.number,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: (value) {},
             decoration: AddInputDecoration("Unit Price"),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
@@ -112,13 +187,8 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            style: GoogleFonts.roboto(
-              fontSize: 24,
-            ),
             controller: _totalPriceTEController,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: TextInputType.number,
-            onChanged: (value) {},
             decoration: AddInputDecoration("Total Price"),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
@@ -128,51 +198,38 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
             },
           ),
           const SizedBox(height: 20),
-          AppDropDownStyle(DropdownButton(
-            style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20),
-            dropdownColor: colorWhite,
-            value: "",
-            items: const [
-              DropdownMenuItem(
-                value: "",
-                child: Text("Select QT"),
-              ),
-              DropdownMenuItem(
-                value: "1 piece",
-                child: Text("1 piece"),
-              ),
-              DropdownMenuItem(
-                value: "2 piece",
-                child: Text("2 piece"),
-              ),
-              DropdownMenuItem(
-                value: "3 piece",
-                child: Text("3 piece"),
-              ),
-              DropdownMenuItem(
-                value: " 4 piece",
-                child: Text("4 piece"),
-              ),
-              DropdownMenuItem(
-                value: "5 piece",
-                child: Text("5 piece"),
-              ),
-            ],
-            onChanged: (value) {},
-            isExpanded: true,
-            underline: Container(),
-          )),
+          _buildQuantityDropdown(),
           const SizedBox(height: 20),
-          Container(
+          SizedBox(
+            width: double.infinity,
             child: ElevatedButton(
-                style: AppButtonStyle(),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {}
-                },
-                child: EleButtonChild("Create Product")),
+              style: AppButtonStyle(),
+              onPressed: () {
+                if (!_formKey.currentState!.validate()) {
+                }
+                if (selectedQuantity == null) {
+                  _showMessage('Please select quantity');
+                  return;
+                }
+                // Add your form submission logic here
+                print('Please select quantity');
+              },
+              child: EleButtonChild("Create Product"),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameTEController.dispose();
+    _codeTEController.dispose();
+    _imageTEController.dispose();
+    _priceTEController.dispose();
+    _totalPriceTEController.dispose();
+    _customQtyController.dispose();
+    super.dispose();
   }
 }
