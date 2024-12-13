@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 class ProductCreateScreen extends StatefulWidget {
   const ProductCreateScreen({super.key});
 
+  static const String name='/create-product';
+
   @override
   State<ProductCreateScreen> createState() => _ProductCreateScreenState();
 }

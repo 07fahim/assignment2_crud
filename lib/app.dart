@@ -1,4 +1,5 @@
 
+import 'package:assignment2_crud/UI/Screen/Product_list_Screen.dart';
 import 'package:flutter/material.dart';
 
 import 'UI/Screen/Product_Create_Screen.dart';
@@ -8,9 +9,13 @@ class CrudApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:ProductCreateScreen() ,
+      initialRoute: "/",
+      routes: {
+        "/":(context) => const ProductListScreen(),
+        ProductCreateScreen.name:(context) =>const ProductCreateScreen()
+      },
     );
   }
 }
