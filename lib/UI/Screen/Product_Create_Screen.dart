@@ -223,6 +223,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
     );
   }
 
+
   @override
   void dispose() {
     _nameTEController.dispose();
