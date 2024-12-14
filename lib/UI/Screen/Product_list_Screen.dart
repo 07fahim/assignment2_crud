@@ -67,7 +67,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           width: 60,
                           height: 60,
                           errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.image_not_supported, size: 60),
+                              const Icon(Icons.image_not_supported, size: 60),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -82,10 +82,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              Text('Product Code: ${productList[index].productCode ?? ''}'),
-                              Text('Quantity: ${productList[index].quantity ?? ''}'),
-                              Text('Price: ${productList[index].unitPrice ?? ''}'),
-                              Text('Total Price: ${productList[index].totalPrice ?? ''}'),
+                              Text(
+                                  'Product Code: ${productList[index].productCode ?? ''}'),
+                              Text(
+                                  'Quantity: ${productList[index].quantity ?? ''}'),
+                              Text(
+                                  'Price: ${productList[index].unitPrice ?? ''}'),
+                              Text(
+                                  'Total Price: ${productList[index].totalPrice ?? ''}'),
                             ],
                           ),
                         ),
@@ -105,7 +109,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               child: IconButton(
                                 padding: EdgeInsets.zero,
                                 onPressed: () {},
-                                icon: const Icon(Icons.delete, color: Colors.white),
+                                icon: const Icon(Icons.delete,
+                                    color: Colors.white),
                               ),
                             ),
                             Container(
@@ -121,7 +126,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                               child: IconButton(
                                 padding: EdgeInsets.zero,
                                 onPressed: () {},
-                                icon: const Icon(Icons.edit, color: Colors.white),
+                                icon:
+                                    const Icon(Icons.edit, color: Colors.white),
                               ),
                             ),
                           ],
@@ -135,7 +141,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      bottomNavigationBar: const BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        clipBehavior: Clip.antiAlias,
+        notchMargin: 10,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(backgroundColor: colorBlue,
         shape: const CircleBorder(),
         onPressed: () {
           Navigator.pushNamed(context, ProductCreateScreen.name);
