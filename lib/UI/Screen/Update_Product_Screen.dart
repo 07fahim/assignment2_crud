@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:assignment2_crud/UI/Style/style.dart';
+import 'package:assignment2_crud/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 
 class ProductUpdateScreen extends StatefulWidget {
-  const ProductUpdateScreen({super.key});
+  final Product product;
+  const ProductUpdateScreen({super.key, required this.product});
 
   static const String name = '/update-product';
 
@@ -21,7 +23,7 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
   final TextEditingController _totalPriceTEController = TextEditingController();
   final TextEditingController _customQtyController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _createProductInProgress = false;
+  bool _updateProductInProgress = false;
 
   String? selectedQuantity;
   List<String> quantityItems = [
@@ -32,6 +34,23 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
     "5 piece",
     "custom"
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeProductData();
+  }
+
+  void _initializeProductData() {
+    _nameTEController.text = widget.product.productName ?? '';
+    _codeTEController.text = widget.product.productCode ?? '';
+    _imageTEController.text = widget.product.image ?? '';
+    _priceTEController.text = widget.product.unitPrice ?? '';
+    _totalPriceTEController.text = widget.product.totalPrice ?? '';
+    selectedQuantity = widget.product.quantity != null
+        ? "${widget.product.quantity} piece"
+        : null;
+  }
 
   void _showMessage(String message) {
     if (!mounted) return;
@@ -108,7 +127,7 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
       appBar: AppBar(
         backgroundColor: colorWhite,
         title: Text(
-          "Create Product",
+          "Update Product",
           style: GoogleFonts.lato(fontSize: 28, fontWeight: FontWeight.w400),
         ),
         centerTitle: true,
@@ -143,7 +162,7 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
             child: Text(qty),
           );
         }).toList(),
-        onChanged: _createProductInProgress ? null : (value) {
+        onChanged: _updateProductInProgress ? null : (value) {
           setState(() {
             if (value == "custom") {
               _showCustomQuantityDialog();
@@ -236,7 +255,7 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
           SizedBox(
             width: double.infinity,
             child: Visibility(
-              visible: !_createProductInProgress,
+              visible: !_updateProductInProgress,
               replacement: const Center(
                 child: CircularProgressIndicator(),
               ),
@@ -250,9 +269,9 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                     _showMessage('Please select quantity');
                     return;
                   }
-                  _createNewProduct();
+                  _updateProduct();
                 },
-                child: EleButtonChild("Create Product"),
+                child: EleButtonChild("Update Product"),
               ),
             ),
           ),
@@ -261,12 +280,12 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
     );
   }
 
-  Future<void> _createNewProduct() async {
+  Future<void> _updateProduct() async {
     try {
-      _createProductInProgress = true;
+      _updateProductInProgress = true;
       setState(() {});
 
-      Uri uri = Uri.parse('https://crud.teamrabbil.com/api/v1/CreateProduct');
+      Uri uri = Uri.parse('https://crud.teamrabbil.com/api/v1/UpdateProduct/${widget.product.id}');
       Map<String, dynamic> requestBody = {
         "Img": _imageTEController.text.trim(),
         "ProductCode": _codeTEController.text.trim(),
@@ -283,30 +302,21 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
       );
 
       if (response.statusCode == 200) {
-        _clearTextFields();
-        _showMessage('New product added successfully!');
+        _showMessage('Product updated successfully!');
+        if (mounted) {
+          Navigator.pop(context, true);
+        }
       } else {
-        _showMessage('Failed to add product. Status code: ${response.statusCode}');
+        _showMessage('Failed to update product. Status code: ${response.statusCode}');
       }
     } catch (e) {
       _showMessage('Error occurred: ${e.toString()}');
     } finally {
-      _createProductInProgress = false;
+      _updateProductInProgress = false;
       if (mounted) {
         setState(() {});
       }
     }
-  }
-
-  void _clearTextFields() {
-    _nameTEController.clear();
-    _codeTEController.clear();
-    _priceTEController.clear();
-    _totalPriceTEController.clear();
-    _imageTEController.clear();
-    setState(() {
-      selectedQuantity = null;
-    });
   }
 
   @override

@@ -63,7 +63,7 @@ class ProductItem extends StatelessWidget {
             child: IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                Navigator.pushNamed(context, ProductUpdateScreen.name);
+                Navigator.pushNamed(context, ProductUpdateScreen.name,arguments: product);
               },
               icon: const Icon(
                 Icons.edit,
