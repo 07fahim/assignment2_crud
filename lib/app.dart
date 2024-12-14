@@ -1,5 +1,6 @@
 
 import 'package:assignment2_crud/UI/Screen/Product_list_Screen.dart';
+import 'package:assignment2_crud/UI/Screen/Update_Product_Screen.dart';
 import 'package:flutter/material.dart';
 
 import 'UI/Screen/Product_Create_Screen.dart';
@@ -14,7 +15,8 @@ class CrudApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/":(context) => const ProductListScreen(),
-        ProductCreateScreen.name:(context) =>const ProductCreateScreen()
+        ProductCreateScreen.name:(context) =>const ProductCreateScreen(),
+        ProductUpdateScreen.name:(context) =>const ProductUpdateScreen()
       },
     );
   }

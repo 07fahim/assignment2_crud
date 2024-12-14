@@ -1,3 +1,4 @@
+import 'package:assignment2_crud/UI/Screen/Update_Product_Screen.dart';
 import 'package:assignment2_crud/UI/Style/style.dart';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
@@ -62,7 +63,7 @@ class ProductItem extends StatelessWidget {
             child: IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                // TODO: implement edit functionality
+                Navigator.pushNamed(context, ProductUpdateScreen.name);
               },
               icon: const Icon(
                 Icons.edit,
