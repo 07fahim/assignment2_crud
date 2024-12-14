@@ -62,7 +62,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     child: Row(
                       children: [
                         Image.network(
-                          productList[index].image ?? '',
+                          productList[index].image ?? 'Unknown',
                           width: 60,
                           height: 60,
                           errorBuilder: (context, error, stackTrace) =>
@@ -74,32 +74,32 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                productList[index].productName ?? '',
+                                productList[index].productName ?? 'Unknown',
                                 style: GoogleFonts.aBeeZee(
                                   fontSize: 18,fontWeight: FontWeight.w700
                                 )
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Product Code: ${productList[index].productCode ?? ''}',
+                                'Product Code: ${productList[index].productCode ?? 'Unknown'}',
                                 style: const TextStyle(
                                     color: Colors.grey,
                                     fontStyle: FontStyle.italic),
                               ),
                               Text(
-                                'Quantity: ${productList[index].quantity ?? ''}',
+                                'Quantity: ${productList[index].quantity ?? 'Unknown'}',
                                 style: const TextStyle(
                                     color: Colors.grey,
                                     fontStyle: FontStyle.italic),
                               ),
                               Text(
-                                'Price: ${productList[index].unitPrice ?? ''}',
+                                'Price: ${productList[index].unitPrice ?? 'Unknown'}',
                                 style: const TextStyle(
                                     color: Colors.grey,
                                     fontStyle: FontStyle.italic),
                               ),
                               Text(
-                                'Total Price: ${productList[index].totalPrice ?? ''}',
+                                'Total Price: ${productList[index].totalPrice ?? 'Unknown'}',
                                 style: const TextStyle(
                                     color: Colors.lime,
                                     fontStyle: FontStyle.italic),
