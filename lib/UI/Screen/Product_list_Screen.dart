@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:assignment2_crud/UI/Screen/Product_Create_Screen.dart';
 import 'package:assignment2_crud/UI/Style/style.dart';
-import 'package:assignment2_crud/Widgets/product_item.dart';
 import 'package:assignment2_crud/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -76,20 +75,35 @@ class _ProductListScreenState extends State<ProductListScreen> {
                             children: [
                               Text(
                                 productList[index].productName ?? '',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: GoogleFonts.aBeeZee(
+                                  fontSize: 18,fontWeight: FontWeight.w700
+                                )
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                  'Product Code: ${productList[index].productCode ?? ''}'),
+                                'Product Code: ${productList[index].productCode ?? ''}',
+                                style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic),
+                              ),
                               Text(
-                                  'Quantity: ${productList[index].quantity ?? ''}'),
+                                'Quantity: ${productList[index].quantity ?? ''}',
+                                style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic),
+                              ),
                               Text(
-                                  'Price: ${productList[index].unitPrice ?? ''}'),
+                                'Price: ${productList[index].unitPrice ?? ''}',
+                                style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontStyle: FontStyle.italic),
+                              ),
                               Text(
-                                  'Total Price: ${productList[index].totalPrice ?? ''}'),
+                                'Total Price: ${productList[index].totalPrice ?? ''}',
+                                style: const TextStyle(
+                                    color: Colors.lime,
+                                    fontStyle: FontStyle.italic),
+                              ),
                             ],
                           ),
                         ),
@@ -147,7 +161,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
         notchMargin: 10,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(backgroundColor: colorBlue,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: colorBlue,
         shape: const CircleBorder(),
         onPressed: () {
           Navigator.pushNamed(context, ProductCreateScreen.name);

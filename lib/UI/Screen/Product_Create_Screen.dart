@@ -1,11 +1,12 @@
 import 'package:assignment2_crud/UI/Style/style.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 
 class ProductCreateScreen extends StatefulWidget {
   const ProductCreateScreen({super.key});
 
-  static const String name='/create-product';
+  static const String name = '/create-product';
 
   @override
   State<ProductCreateScreen> createState() => _ProductCreateScreenState();
@@ -19,18 +20,27 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
   final TextEditingController _totalPriceTEController = TextEditingController();
   final TextEditingController _customQtyController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _createProductInProgress = false;
 
   String? selectedQuantity;
-  List<String> quantityItems = ["1 piece", "2 piece", "3 piece", "4 piece", "5 piece", "custom"];
+  List<String> quantityItems = [
+    "1 piece",
+    "2 piece",
+    "3 piece",
+    "4 piece",
+    "5 piece",
+    "custom"
+  ];
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor:colorDarkBlue,
+        backgroundColor: colorDarkBlue,
         duration: const Duration(seconds: 2),
       ),
     );
@@ -113,10 +123,8 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
         style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20),
         dropdownColor: colorWhite,
         value: selectedQuantity,
-        hint: Text(
-            "Select QT",
-            style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20)
-        ),
+        hint: Text("Select QT",
+            style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20)),
         items: quantityItems.map((String qty) {
           return DropdownMenuItem(
             value: qty,
@@ -144,6 +152,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       child: Column(
         children: [
           TextFormField(
+            style: GoogleFonts.roboto(fontSize: 22),
             controller: _nameTEController,
             decoration: AddInputDecoration("Product Name"),
             validator: (String? value) {
@@ -155,6 +164,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
+            style: GoogleFonts.roboto(fontSize: 22),
             controller: _codeTEController,
             decoration: AddInputDecoration("Product Code"),
             validator: (String? value) {
@@ -166,6 +176,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
+            style: GoogleFonts.roboto(fontSize: 22),
             controller: _imageTEController,
             decoration: AddInputDecoration("Product Image"),
             validator: (String? value) {
@@ -177,6 +188,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
+            style: GoogleFonts.roboto(fontSize: 22),
             controller: _priceTEController,
             keyboardType: TextInputType.number,
             decoration: AddInputDecoration("Unit Price"),
@@ -189,6 +201,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
+            style: GoogleFonts.roboto(fontSize: 22),
             controller: _totalPriceTEController,
             keyboardType: TextInputType.number,
             decoration: AddInputDecoration("Total Price"),
@@ -207,13 +220,11 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
             child: ElevatedButton(
               style: AppButtonStyle(),
               onPressed: () {
-                if (!_formKey.currentState!.validate()) {
-                }
+                if (!_formKey.currentState!.validate()) {}
                 if (selectedQuantity == null) {
                   _showMessage('Please select quantity');
                   return;
                 }
-
               },
               child: EleButtonChild("Create Product"),
             ),
@@ -223,6 +234,12 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
     );
   }
 
+  Future<void> _createNewProduct() async {
+    _createProductInProgress = true;
+    setState(() {});
+    Uri uri =Uri.parse('https://crud.teamrabbil.com/api/v1/CreateProduct');
+    Response response =await post(uri);
+  }
 
   @override
   void dispose() {
