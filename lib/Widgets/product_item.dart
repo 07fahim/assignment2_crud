@@ -1,15 +1,16 @@
 
-import 'package:assignment2_crud/UI/Style/style.dart';
+import 'package:assignment2_crud/utils/delete_function.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../UI/Screen/Product_Create_Screen.dart';
+
 import '../UI/Screen/Update_product_Screen.dart';
 import '../models/product.dart';
 
 class ProductItem extends StatelessWidget {
-  const ProductItem({super.key, required this.product});
+   ProductItem({super.key, required this.product, required this.onRefresh,});
 
   final Product product;
+   final Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,17 @@ class ProductItem extends StatelessWidget {
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     onPressed: () {
-                      // TODO: implement delete product api
+                      DeleteFunction.showDeleteConfirmation(
+                        context: context,
+                        id: product.id ?? '',
+                        productName: product.productName ?? 'Unknown',
+                        productCode: product.productCode ?? 'Unknown',
+                        quantity: product.quantity?.toString() ?? 'Unknown',
+                        price: product.unitPrice?.toString() ?? 'Unknown',
+                        totalPrice: product.totalPrice?.toString() ?? 'Unknown',
+                        imageUrl: product.image,
+                        onDeleteSuccess: onRefresh,  // Use the passed refresh function
+                      );
                     },
                     icon: const Icon(Icons.delete, color: Colors.white),
                   ),

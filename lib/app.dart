@@ -10,6 +10,7 @@ class CrudApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       onGenerateRoute: (RouteSettings settings) {
         late Widget widget;

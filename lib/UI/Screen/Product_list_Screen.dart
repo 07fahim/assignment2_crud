@@ -63,7 +63,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 padding: const EdgeInsets.all(16),
                 itemCount: productList.length,
                 itemBuilder: (context, index) {
-                  return ProductItem(product: productList[index]);
+                  return ProductItem(product: productList[index], onRefresh:_getProductList);
                 },
               ),
             ),
