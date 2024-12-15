@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:assignment2_crud/UI/Screen/Product_Create_Screen.dart';
 import 'package:assignment2_crud/UI/Style/style.dart';
+import 'package:assignment2_crud/Widgets/product_item.dart';
 import 'package:assignment2_crud/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,7 +27,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   Widget ScreenBackground(BuildContext context) {
     return SvgPicture.asset(
-      "assets/images/SVG_Background1.svg",
+      "assets/images/SVG_Background.svg",
       alignment: Alignment.center,
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -62,101 +63,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 padding: const EdgeInsets.all(16),
                 itemCount: productList.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Image.network(
-                            productList[index].image ?? 'Unknown',
-                            width: 60,
-                            height: 60,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.image_not_supported, size: 60),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  productList[index].productName ?? 'Unknown',
-                                  style: GoogleFonts.aBeeZee(
-                                    fontSize: 18,fontWeight: FontWeight.w700
-                                  )
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Product Code: ${productList[index].productCode ?? 'Unknown'}',
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontStyle: FontStyle.italic),
-                                ),
-                                Text(
-                                  'Quantity: ${productList[index].quantity ?? 'Unknown'}',
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontStyle: FontStyle.italic),
-                                ),
-                                Text(
-                                  'Price: ${productList[index].unitPrice ?? 'Unknown'}',
-                                  style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontStyle: FontStyle.italic),
-                                ),
-                                Text(
-                                  'Total Price: ${productList[index].totalPrice ?? 'Unknown'}',
-                                  style: const TextStyle(
-                                      color: Colors.lime,
-                                      fontStyle: FontStyle.italic),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration:  BoxDecoration(
-                                  color: Colors.red.shade500,
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    bottomLeft: Radius.circular(8),
-                                  ),
-                                ),
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.delete,
-                                      color: Colors.white),
-                                ),
-                              ),
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                  color:Colors.lightBlueAccent,
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                ),
-                                child: IconButton(
-                                  padding: EdgeInsets.zero,
-                                  onPressed: () {},
-                                  icon:
-                                      const Icon(Icons.edit, color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return ProductItem(product: productList[index]);
                 },
               ),
             ),
@@ -208,4 +115,5 @@ class _ProductListScreenState extends State<ProductListScreen> {
     _getProductListInProgress = false;
     setState(() {});
   }
+
 }

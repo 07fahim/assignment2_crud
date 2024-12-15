@@ -1,20 +1,23 @@
 import 'dart:convert';
 
 import 'package:assignment2_crud/UI/Style/style.dart';
+import 'package:assignment2_crud/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 
-class ProductCreateScreen extends StatefulWidget {
-  const ProductCreateScreen({super.key});
+class UpdateProductScreen extends StatefulWidget {
+  const UpdateProductScreen({super.key, required this.product});
 
-  static const String name = '/create-product';
+  final Product product;
+
+  static const String name = '/update-product';
 
   @override
-  State<ProductCreateScreen> createState() => _ProductCreateScreenState();
+  State<UpdateProductScreen> createState() => _UpdateProductScreenState();
 }
 
-class _ProductCreateScreenState extends State<ProductCreateScreen> {
+class _UpdateProductScreenState extends State<UpdateProductScreen> {
   final TextEditingController _nameTEController = TextEditingController();
   final TextEditingController _codeTEController = TextEditingController();
   final TextEditingController _imageTEController = TextEditingController();
@@ -22,7 +25,18 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
   final TextEditingController _totalPriceTEController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _createProductInProgress = false;
+  bool _updateProductInProgress = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameTEController.text = widget.product.productName ?? '';
+    _priceTEController.text = widget.product.unitPrice ?? '';
+    _totalPriceTEController.text = widget.product.totalPrice ?? '';
+    _quantityController.text = widget.product.quantity ?? '';
+    _imageTEController.text = widget.product.image ?? '';
+    _codeTEController.text = widget.product.productCode ?? '';
+  }
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -30,7 +44,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
         content: Text(
           message,
           style:
-          const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: colorDarkBlue,
         duration: const Duration(seconds: 2),
@@ -44,7 +58,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       appBar: AppBar(
         backgroundColor: colorWhite,
         title: Text(
-          "Create Product",
+          "Update Product",
           style: GoogleFonts.lato(fontSize: 28, fontWeight: FontWeight.w400),
         ),
         centerTitle: true,
@@ -69,7 +83,6 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       child: Column(
         children: [
           TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _nameTEController,
             decoration: AddInputDecoration("Product Name"),
@@ -82,7 +95,6 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _codeTEController,
             decoration: AddInputDecoration("Product Code"),
@@ -95,7 +107,6 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _imageTEController,
             decoration: AddInputDecoration("Product Image"),
@@ -108,7 +119,6 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _priceTEController,
             keyboardType: TextInputType.number,
@@ -122,7 +132,6 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _totalPriceTEController,
             keyboardType: TextInputType.number,
@@ -136,7 +145,6 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
           const SizedBox(height: 20),
           TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _quantityController,
             keyboardType: TextInputType.number,
@@ -152,20 +160,20 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           SizedBox(
             width: double.infinity,
             child: Visibility(
-              visible: _createProductInProgress == false,
+              visible: _updateProductInProgress == false,
               replacement: const Center(
                 child: CircularProgressIndicator(),
               ),
               child: ElevatedButton(
                 style: AppButtonStyle(),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _createNewProduct();
-                    } else {
-                      _showMessage("Please correct the errors in the form.");
-                    }
-                  },
-                child: EleButtonChild("Create Product"),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _updateProduct();
+                  } else {
+                    _showMessage("Please correct the errors in the form.");
+                  }
+                },
+                child: EleButtonChild("Update Product"),
               ),
             ),
           ),
@@ -174,10 +182,11 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
     );
   }
 
-  Future<void> _createNewProduct() async {
-    _createProductInProgress = true;
+  Future<void> _updateProduct() async {
+    _updateProductInProgress = true;
     setState(() {});
-    Uri uri = Uri.parse('https://crud.teamrabbil.com/api/v1/CreateProduct');
+    Uri uri = Uri.parse(
+        'https://crud.teamrabbil.com/api/v1/UpdateProduct/${widget.product.id}');
 
     Map<String, dynamic> requestBody = {
       "Img": _imageTEController.text.trim(),
@@ -195,33 +204,22 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
     );
     print(response.statusCode);
     print(response.body);
-    _createProductInProgress = false;
+    _updateProductInProgress = false;
     setState(() {});
     if (response.statusCode == 200) {
-      _clearTextFields();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('New product added!'),
+          content: Text('Product has been updated!'),
         ),
-
       );
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('New product add failed! Try again.'),
+          content: Text('Product update failed! Try again.'),
         ),
       );
     }
-  }
-
-  void _clearTextFields() {
-    _nameTEController.clear();
-    _codeTEController.clear();
-    _priceTEController.clear();
-    _totalPriceTEController.clear();
-    _imageTEController.clear();
-    _quantityController.clear();
   }
 
   @override

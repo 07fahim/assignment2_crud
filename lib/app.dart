@@ -1,10 +1,8 @@
-
+import 'package:assignment2_crud/UI/Screen/Product_Create_Screen.dart';
 import 'package:assignment2_crud/UI/Screen/Product_list_Screen.dart';
-import 'package:assignment2_crud/UI/Screen/Update_Product_Screen.dart';
+import 'package:assignment2_crud/UI/Screen/Update_product_Screen.dart';
+import 'package:assignment2_crud/models/product.dart';
 import 'package:flutter/material.dart';
-
-import 'UI/Screen/Product_Create_Screen.dart';
-import 'models/product.dart';
 
 class CrudApp extends StatelessWidget {
   const CrudApp({super.key});
@@ -19,13 +17,15 @@ class CrudApp extends StatelessWidget {
           widget = const ProductListScreen();
         } else if (settings.name == ProductCreateScreen.name) {
           widget = const ProductCreateScreen();
-        } else if (settings.name == ProductUpdateScreen.name) {
+        } else if (settings.name == UpdateProductScreen.name) {
           final Product product = settings.arguments as Product;
-          widget = ProductUpdateScreen(product: product);
+          widget = UpdateProductScreen(product: product);
         }
 
         return MaterialPageRoute(
-          builder: (context) => widget,  // Fixed the builder syntax
+          builder: (context) {
+            return widget;
+          },
         );
       },
     );

@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const colorGrey = Color.fromRGBO(138, 134, 134, 1);
-const colorBlue = Color.fromRGBO(191, 227, 245, 1);
+const colorBlue = Color.fromRGBO(192, 227, 245, 1);
 const colorWhite = Color.fromRGBO(255, 255, 255, 1);
 const colorDarkBlue = Color.fromRGBO(44, 62, 80, 1);
 
@@ -66,7 +66,7 @@ ButtonStyle AppButtonStyle() {
 Ink EleButtonChild(ButtonText) {
   return Ink(
     decoration: BoxDecoration(
-      color: colorBlue,
+      color: colorDarkBlue,
       borderRadius: BorderRadius.circular(6),
     ),
     child: Container(
