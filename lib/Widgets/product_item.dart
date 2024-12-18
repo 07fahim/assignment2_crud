@@ -112,17 +112,20 @@ class ProductItem extends StatelessWidget {
                       bottomRight: Radius.circular(8),
                     ),
                   ),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      Navigator.pushNamed(
-                          context,
-                          UpdateProductScreen.name,
-                          arguments: product
-                      );
-                    },
-                    icon: const Icon(Icons.edit, color: Colors.white),
-                  ),
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () async {
+                        final dynamic result = await Navigator.pushNamed(
+                            context,
+                            UpdateProductScreen.name,
+                            arguments: product
+                        );
+                        if (result is bool && result) {
+                          onRefresh();
+                        }
+                      },
+                      icon: const Icon(Icons.edit, color: Colors.white),
+                    ),
                 ),
               ],
             ),
