@@ -79,8 +79,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorBlue,
         shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.pushNamed(context, ProductCreateScreen.name);
+        onPressed: () async {  // Make this async
+          final result = await Navigator.pushNamed(context, ProductCreateScreen.name);
+          if (result == true) {  // Check if product was created successfully
+            _getProductList();  // Refresh the list
+          }
         },
         child: const Icon(Icons.add, color: colorDarkBlue),
       ),
