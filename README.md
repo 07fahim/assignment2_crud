@@ -1,6 +1,10 @@
 # assignment2_crud
 
 A new Flutter project.
+## CRUD APP
+https://github.com/user-attachments/assets/4409f3e9-dc5e-4bd7-b439-d3264673d8a6
+
+
 
 ## Getting Started
 
