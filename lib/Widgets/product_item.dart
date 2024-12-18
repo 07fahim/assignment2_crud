@@ -64,7 +64,7 @@ class ProductItem extends StatelessWidget {
                   Text(
                     'Total Price: ${product.totalPrice ?? 'Unknown'}',
                     style: const TextStyle(
-                        color: Colors.lime,
+                        color: Colors.deepOrangeAccent,
                         fontStyle: FontStyle.italic
                     ),
                   ),
