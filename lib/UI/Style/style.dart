@@ -14,9 +14,11 @@ const darkCardColor = Color.fromRGBO(66, 66, 66, 1);
 const darkTextColor = Color.fromRGBO(255, 255, 255, 0.87);
 const darkIconColor = Color.fromRGBO(255, 255, 255, 0.6);
 
-ScreenBackground(context) {
+ScreenBackground(BuildContext context, bool isDarkMode) {
   return SvgPicture.asset(
-    "assets/images/SVG_Background.svg",
+    isDarkMode
+        ? "assets/images/SVG_Background_dark.svg"  // Dark mode SVG
+        : "assets/images/SVG_Background.svg",      // Light mode SVG
     alignment: Alignment.center,
     height: MediaQuery.of(context).size.height,
     width: MediaQuery.of(context).size.width,
@@ -90,22 +92,23 @@ ButtonStyle AppButtonStyle(bool isDarkMode) {
   );
 }
 
-Ink EleButtonChild(ButtonText) {
+Ink EleButtonChild(String ButtonText, {bool isDarkMode = false}) {
   return Ink(
     decoration: BoxDecoration(
-      color: colorDarkBlue,
+      color: isDarkMode ? darkCardColor : colorDarkBlue,
       borderRadius: BorderRadius.circular(6),
     ),
     child: Container(
-        height: 45,
-        alignment: Alignment.center,
-        child: Text(
-          ButtonText,
-          style: GoogleFonts.firaSans(
-            fontSize:24,
-            fontWeight: FontWeight.w800,
-            color: colorWhite
-          ),
-        )),
+      height: 45,
+      alignment: Alignment.center,
+      child: Text(
+        ButtonText,
+        style: GoogleFonts.firaSans(
+          fontSize: 24,
+          fontWeight: FontWeight.w800,
+          color: isDarkMode ? darkTextColor : colorWhite,
+        ),
+      ),
+    ),
   );
 }

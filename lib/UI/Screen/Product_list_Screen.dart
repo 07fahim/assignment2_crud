@@ -9,7 +9,14 @@ import 'package:http/http.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductListScreen extends StatefulWidget {
-  const ProductListScreen({super.key, required bool isDarkMode, required void Function() onThemeToggle});
+  final bool isDarkMode;
+  final VoidCallback onThemeToggle;
+
+  const ProductListScreen({
+    super.key,
+    required this.isDarkMode,
+    required this.onThemeToggle,
+  });
 
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();
@@ -18,7 +25,6 @@ class ProductListScreen extends StatefulWidget {
 class _ProductListScreenState extends State<ProductListScreen> {
   List<Product> productList = [];
   bool _getProductListInProgress = false;
-  bool _isDarkMode = false;
 
   @override
   void initState() {
@@ -26,54 +32,42 @@ class _ProductListScreenState extends State<ProductListScreen> {
     _getProductList();
   }
 
-  Widget ScreenBackground(BuildContext context) {
-    return _isDarkMode
-        ? Container(
-      color: darkBackgroundColor,
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-    )
-        : SvgPicture.asset(
-      "assets/images/SVG_Background.svg",
-      alignment: Alignment.center,
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      fit: BoxFit.cover,
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _isDarkMode ? darkBackgroundColor : Colors.white,
+      backgroundColor: widget.isDarkMode ? darkBackgroundColor : Colors.white,
       appBar: AppBar(
-        backgroundColor: _isDarkMode ? darkCardColor : colorWhite,
+        backgroundColor: widget.isDarkMode ? darkCardColor : colorWhite,
         title: Text(
           "CRUD APP",
           style: GoogleFonts.poppins(
             fontSize: 22,
-            color: _isDarkMode ? darkTextColor : Colors.black,
+            color: widget.isDarkMode ? darkTextColor : Colors.black,
             fontWeight: FontWeight.w500,
           ),
         ),
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {
-              setState(() {
-                _isDarkMode = !_isDarkMode;
-              });
-            },
+            onPressed: widget.onThemeToggle,  // Just call the callback directly
             icon: Icon(
-              _isDarkMode ? Icons.light_mode : Icons.dark_mode,
-              color: _isDarkMode ? darkIconColor : Colors.black,
+              widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: widget.isDarkMode ? darkIconColor : Colors.black,
             ),
           ),
         ],
       ),
       body: Stack(
         children: [
-          ScreenBackground(context),
+          widget.isDarkMode
+              ? Container(
+            color: darkBackgroundColor,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+          )
+              : ScreenBackground(context,widget.isDarkMode),
           RefreshIndicator(
             onRefresh: () async {
               await _getProductList();
@@ -82,7 +76,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               visible: !_getProductListInProgress,
               replacement: Center(
                 child: CircularProgressIndicator(
-                  color: _isDarkMode ? darkTextColor : colorDarkBlue,
+                  color: widget.isDarkMode ? darkTextColor : colorDarkBlue,
                 ),
               ),
               child: ListView.builder(
@@ -92,7 +86,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   return ProductItem(
                     product: productList[index],
                     onRefresh: _getProductList,
-                    isDarkMode: _isDarkMode,
+                    isDarkMode: widget.isDarkMode,
                   );
                 },
               ),
@@ -101,7 +95,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: _isDarkMode ? darkCardColor : Colors.grey.shade300,
+        color: widget.isDarkMode ? darkCardColor : Colors.grey.shade300,
         elevation: 20,
         shape: const CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
@@ -112,7 +106,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         height: 70,
         width: 70,
         child: FloatingActionButton(
-          backgroundColor: _isDarkMode ? darkCardColor : colorWhite,
+          backgroundColor: widget.isDarkMode ? darkCardColor : colorWhite,
           shape: const CircleBorder(
             side: BorderSide(
               color: Colors.transparent,

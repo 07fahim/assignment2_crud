@@ -9,7 +9,10 @@ import '../Style/style.dart';
 
 class UpdateProductScreen extends StatefulWidget {
   final bool isDarkMode;
-  const UpdateProductScreen({super.key, required this.product, required this.isDarkMode});
+  final VoidCallback onThemeToggle;
+
+  const UpdateProductScreen(
+      {super.key, required this.product, required this.isDarkMode, required this.onThemeToggle});
 
   static const String name = '/update-product';
 
@@ -70,10 +73,8 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold
-          ),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: colorDarkBlue,
         duration: const Duration(seconds: 2),
@@ -94,7 +95,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
           content: TextField(
             controller: _customQtyController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Enter quantity",widget.isDarkMode),
+            decoration: AddInputDecoration("Enter quantity", widget.isDarkMode),
           ),
           actions: [
             TextButton(
@@ -136,17 +137,37 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.isDarkMode ? darkBackgroundColor : Colors.white,
       appBar: AppBar(
-        backgroundColor: colorWhite,
+        backgroundColor: widget.isDarkMode ? darkCardColor : colorWhite,
         title: Text(
-          "Update Product",
-          style: GoogleFonts.lato(fontSize: 28, fontWeight: FontWeight.w400),
+          "Update Product",  // or "Update Product" for UpdateProductScreen
+          style: GoogleFonts.lato(
+            fontSize: 28,
+            fontWeight: FontWeight.w400,
+            color: widget.isDarkMode ? darkTextColor : Colors.black,
+          ),
         ),
         centerTitle: true,
+        actions: [  // Add this actions list
+          IconButton(
+            onPressed: widget.onThemeToggle,  // Use the callback directly
+            icon: Icon(
+              widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: widget.isDarkMode ? darkIconColor : Colors.black,
+            ),
+          ),
+        ],
       ),
       body: Stack(
         children: [
-          ScreenBackground(context),
+          widget.isDarkMode
+              ? Container(
+                  color: darkBackgroundColor,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                )
+              : ScreenBackground(context,widget.isDarkMode),
           Container(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(30),
@@ -163,37 +184,34 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
         DropdownButton<String>(
           style: GoogleFonts.merriweather(
               color: widget.isDarkMode ? darkTextColor : colorGrey,
-              fontSize: 20
-          ),
+              fontSize: 20),
           dropdownColor: widget.isDarkMode ? darkCardColor : colorWhite,
           value: selectedQuantity,
-          hint: Text(
-              "Select QT",
+          hint: Text("Select QT",
               style: GoogleFonts.merriweather(
                   color: widget.isDarkMode ? darkIconColor : colorGrey,
-                  fontSize: 20
-              )
-          ),
+                  fontSize: 20)),
           items: quantityItems.map((String qty) {
             return DropdownMenuItem(
               value: qty,
               child: Text(
                 qty,
                 style: TextStyle(
-                    color: widget.isDarkMode ? darkTextColor : colorGrey
-                ),
+                    color: widget.isDarkMode ? darkTextColor : colorGrey),
               ),
             );
           }).toList(),
-          onChanged: _updateProductInProgress ? null : (value) {
-            setState(() {
-              if (value == "custom") {
-                _showCustomQuantityDialog();
-              } else {
-                selectedQuantity = value;
-              }
-            });
-          },
+          onChanged: _updateProductInProgress
+              ? null
+              : (value) {
+                  setState(() {
+                    if (value == "custom") {
+                      _showCustomQuantityDialog();
+                    } else {
+                      selectedQuantity = value;
+                    }
+                  });
+                },
           isExpanded: true,
           underline: Container(),
           icon: Icon(
@@ -201,8 +219,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
             color: widget.isDarkMode ? darkIconColor : colorGrey,
           ),
         ),
-        widget.isDarkMode
-    );
+        widget.isDarkMode);
   }
 
   Widget _buildProductForm() {
@@ -211,9 +228,12 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
       child: Column(
         children: [
           TextFormField(
-            style: GoogleFonts.roboto(fontSize: 22),
+            style: GoogleFonts.roboto(
+              fontSize: 22,
+              color: widget.isDarkMode ? darkTextColor : Colors.black,
+            ),
             controller: _nameTEController,
-            decoration: AddInputDecoration("Product Name",widget.isDarkMode),
+            decoration: AddInputDecoration("Product Name", widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product name";
@@ -225,7 +245,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
           TextFormField(
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _codeTEController,
-            decoration: AddInputDecoration("Product Code",widget.isDarkMode),
+            decoration: AddInputDecoration("Product Code", widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product code";
@@ -237,7 +257,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
           TextFormField(
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _imageTEController,
-            decoration: AddInputDecoration("Product Image",widget.isDarkMode),
+            decoration: AddInputDecoration("Product Image", widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product image";
@@ -250,7 +270,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _priceTEController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Unit Price",widget.isDarkMode),
+            decoration: AddInputDecoration("Unit Price", widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter unit price";
@@ -266,7 +286,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _totalPriceTEController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Total Price",widget.isDarkMode),
+            decoration: AddInputDecoration("Total Price", widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter total price";
@@ -312,7 +332,8 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     _updateProductInProgress = true;
     setState(() {});
 
-    Uri uri = Uri.parse('https://crud.teamrabbil.com/api/v1/UpdateProduct/${widget.product.id}');
+    Uri uri = Uri.parse(
+        'https://crud.teamrabbil.com/api/v1/UpdateProduct/${widget.product.id}');
     Map<String, dynamic> requestBody = {
       "Img": _imageTEController.text.trim(),
       "ProductCode": _codeTEController.text.trim(),
@@ -322,11 +343,9 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
       "UnitPrice": _priceTEController.text.trim()
     };
 
-    Response response = await post(
-        uri,
+    Response response = await post(uri,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(requestBody)
-    );
+        body: jsonEncode(requestBody));
 
     _updateProductInProgress = false;
     setState(() {});
@@ -349,7 +368,6 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
       );
     }
   }
-
 
   @override
   void dispose() {

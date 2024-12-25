@@ -14,16 +14,30 @@ class CrudApp extends StatefulWidget {
 
 class _CrudAppState extends State<CrudApp> {
   bool isDarkMode = false;
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   void toggleTheme() {
     setState(() {
       isDarkMode = !isDarkMode;
+      // Force rebuild all screens
+      if (_navigatorKey.currentState != null) {
+        _navigatorKey.currentState!.pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => ProductListScreen(
+              isDarkMode: isDarkMode,
+              onThemeToggle: toggleTheme,
+            ),
+          ),
+              (route) => false,
+        );
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: _navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: isDarkMode ? darkBackgroundColor : Colors.white,
@@ -49,19 +63,40 @@ class _CrudAppState extends State<CrudApp> {
       initialRoute: '/',
       onGenerateRoute: (RouteSettings settings) {
         late Widget widget;
-        if (settings.name == '/') {
-          widget = ProductListScreen(
-            isDarkMode: isDarkMode,
-            onThemeToggle: toggleTheme,
-          );
-        } else if (settings.name == ProductCreateScreen.name) {
-          widget = ProductCreateScreen(isDarkMode: isDarkMode);
-        } else if (settings.name == UpdateProductScreen.name) {
-          final Product product = settings.arguments as Product;
-          widget = UpdateProductScreen(
-            product: product,
-            isDarkMode: isDarkMode,
-          );
+
+        switch (settings.name) {
+          case '/':
+            widget = ProductListScreen(
+              key: UniqueKey(),
+              isDarkMode: isDarkMode,
+              onThemeToggle: toggleTheme,
+            );
+            break;
+
+          case ProductCreateScreen.name:
+            widget = ProductCreateScreen(
+              key: UniqueKey(),
+              isDarkMode: isDarkMode,
+              onThemeToggle: toggleTheme,
+            );
+            break;
+
+          case UpdateProductScreen.name:
+            final Product product = settings.arguments as Product;
+            widget = UpdateProductScreen(
+              key: UniqueKey(),
+              product: product,
+              isDarkMode: isDarkMode,
+              onThemeToggle: toggleTheme,
+            );
+            break;
+
+          default:
+            widget = ProductListScreen(
+              key: UniqueKey(),
+              isDarkMode: isDarkMode,
+              onThemeToggle: toggleTheme,
+            );
         }
 
         return MaterialPageRoute(

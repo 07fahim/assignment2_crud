@@ -6,7 +6,8 @@ import 'package:http/http.dart';
 
 class ProductCreateScreen extends StatefulWidget {
   final bool isDarkMode;
-  const ProductCreateScreen({super.key, required this.isDarkMode});
+  final VoidCallback onThemeToggle;
+  const ProductCreateScreen({super.key, required this.isDarkMode,  required this.onThemeToggle});
 
   static const String name = '/create-product';
 
@@ -110,7 +111,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       appBar: AppBar(
         backgroundColor: widget.isDarkMode ? darkCardColor : colorWhite,
         title: Text(
-          "Create Product",
+          "Create Product",  // or "Update Product" for UpdateProductScreen
           style: GoogleFonts.lato(
             fontSize: 28,
             fontWeight: FontWeight.w400,
@@ -118,12 +119,25 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           ),
         ),
         centerTitle: true,
+        actions: [  // Add this actions list
+          IconButton(
+            onPressed: widget.onThemeToggle,  // Use the callback directly
+            icon: Icon(
+              widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: widget.isDarkMode ? darkIconColor : Colors.black,
+            ),
+          ),
+        ],
       ),
       body: Stack(
         children: [
           widget.isDarkMode
-              ? Container(color: darkBackgroundColor)
-              : ScreenBackground(context),
+              ? Container(
+            color: darkBackgroundColor,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+          )
+              : ScreenBackground(context,widget.isDarkMode),
           SingleChildScrollView(
             padding: const EdgeInsets.all(30),
             child: _buildProductForm(),
