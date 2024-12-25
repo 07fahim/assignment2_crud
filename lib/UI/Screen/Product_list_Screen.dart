@@ -18,6 +18,7 @@ class ProductListScreen extends StatefulWidget {
 class _ProductListScreenState extends State<ProductListScreen> {
   List<Product> productList = [];
   bool _getProductListInProgress = false;
+  bool _isDarkMode = false;
 
   @override
   void initState() {
@@ -26,7 +27,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   Widget ScreenBackground(BuildContext context) {
-    return SvgPicture.asset(
+    return _isDarkMode
+        ? Container(
+      color: darkBackgroundColor,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+    )
+        : SvgPicture.asset(
       "assets/images/SVG_Background.svg",
       alignment: Alignment.center,
       height: MediaQuery.of(context).size.height,
@@ -38,17 +45,30 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _isDarkMode ? darkBackgroundColor : Colors.white,
       appBar: AppBar(
-        title: const Text("CRUD APP"),
+        backgroundColor: _isDarkMode ? darkCardColor : colorWhite,
+        title: Text(
+          "CRUD APP",
+          style: GoogleFonts.poppins(
+            fontSize: 22,
+            color: _isDarkMode ? darkTextColor : Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         centerTitle: true,
-        titleTextStyle: GoogleFonts.poppins(
-            fontSize: 22, color: Colors.black, fontWeight: FontWeight.w500),
         actions: [
           IconButton(
-              onPressed: () {
-                _getProductList();
-              },
-              icon: const Icon(Icons.refresh_sharp))
+            onPressed: () {
+              setState(() {
+                _isDarkMode = !_isDarkMode;
+              });
+            },
+            icon: Icon(
+              _isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              color: _isDarkMode ? darkIconColor : Colors.black,
+            ),
+          ),
         ],
       ),
       body: Stack(
@@ -56,19 +76,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ScreenBackground(context),
           RefreshIndicator(
             onRefresh: () async {
-              _getProductList();
+              await _getProductList();
             },
             child: Visibility(
-              visible: _getProductListInProgress == false,
-              replacement: const Center(
-                child: CircularProgressIndicator(),
+              visible: !_getProductListInProgress,
+              replacement: Center(
+                child: CircularProgressIndicator(
+                  color: _isDarkMode ? darkTextColor : colorDarkBlue,
+                ),
               ),
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: productList.length,
                 itemBuilder: (context, index) {
                   return ProductItem(
-                      product: productList[index], onRefresh: _getProductList);
+                    product: productList[index],
+                    onRefresh: _getProductList,
+                    isDarkMode: _isDarkMode,
+                  );
                 },
               ),
             ),
@@ -76,7 +101,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.grey.shade300,
+        color: _isDarkMode ? darkCardColor : Colors.grey.shade300,
         elevation: 20,
         shape: const CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
@@ -87,16 +112,18 @@ class _ProductListScreenState extends State<ProductListScreen> {
         height: 70,
         width: 70,
         child: FloatingActionButton(
-          backgroundColor: colorWhite,
+          backgroundColor: _isDarkMode ? darkCardColor : colorWhite,
           shape: const CircleBorder(
             side: BorderSide(
               color: Colors.transparent,
-              width: 10, // Keep border width if needed
+              width: 10,
             ),
           ),
           onPressed: () async {
-            final result =
-                await Navigator.pushNamed(context, ProductCreateScreen.name);
+            final result = await Navigator.pushNamed(
+              context,
+              ProductCreateScreen.name,
+            );
             if (result == true) {
               _getProductList();
             }
@@ -112,31 +139,45 @@ class _ProductListScreenState extends State<ProductListScreen> {
   }
 
   Future<void> _getProductList() async {
-    productList.clear();
-    _getProductListInProgress = true;
-    setState(() {});
-    Uri uri = Uri.parse("https://crud.teamrabbil.com/api/v1/ReadProduct");
-    Response response = await get(uri);
-    print(response.statusCode);
-    print(response.body);
-    if (response.statusCode == 200) {
-      final decodedData = jsonDecode(response.body);
-      print(decodedData['status']);
-      for (Map<String, dynamic> p in decodedData['data']) {
-        Product product = Product(
-            id: p['_id'],
-            productName: p['ProductName'],
-            productCode: p['ProductCode'],
-            image: p['Img'],
-            unitPrice: p['UnitPrice'],
-            quantity: p['Qty'],
-            totalPrice: p['TotalPrice'],
-            createdDate: p['CreatedDate']);
-        productList.add(product);
+    try {
+      setState(() {
+        productList.clear();
+        _getProductListInProgress = true;
+      });
+
+      Uri uri = Uri.parse("https://crud.teamrabbil.com/api/v1/ReadProduct");
+      Response response = await get(uri);
+
+      if (response.statusCode == 200) {
+        final decodedData = jsonDecode(response.body);
+        if (decodedData['status'] == 'success') {
+          for (Map<String, dynamic> p in decodedData['data']) {
+            Product product = Product(
+              id: p['_id'],
+              productName: p['ProductName'],
+              productCode: p['ProductCode'],
+              image: p['Img'],
+              unitPrice: p['UnitPrice'],
+              quantity: p['Qty'],
+              totalPrice: p['TotalPrice'],
+              createdDate: p['CreatedDate'],
+            );
+            productList.add(product);
+          }
+        }
       }
-      setState(() {});
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading products: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _getProductListInProgress = false;
+        });
+      }
     }
-    _getProductListInProgress = false;
-    setState(() {});
   }
 }
