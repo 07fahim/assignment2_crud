@@ -9,6 +9,11 @@ const colorBlue = Color.fromRGBO(192, 227, 245, 1);
 const colorWhite = Color.fromRGBO(255, 255, 255, 1);
 const colorDarkBlue = Color.fromRGBO(44, 62, 80, 1);
 
+const darkBackgroundColor = Color.fromRGBO(33, 33, 33, 1);
+const darkCardColor = Color.fromRGBO(66, 66, 66, 1);
+const darkTextColor = Color.fromRGBO(255, 255, 255, 0.87);
+const darkIconColor = Color.fromRGBO(255, 255, 255, 0.6);
+
 ScreenBackground(context) {
   return SvgPicture.asset(
     "assets/images/SVG_Background.svg",
