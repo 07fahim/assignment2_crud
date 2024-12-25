@@ -74,7 +74,7 @@ class ProductItem extends StatelessWidget {
                   Text(
                     'Total Price: ${product.totalPrice ?? 'Unknown'}',
                     style: TextStyle(
-                      color: isDarkMode ? darkIconColor : Colors.deepOrangeAccent,
+                      color: isDarkMode ? Colors.blueGrey : Colors.deepOrangeAccent,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
