@@ -75,8 +75,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
         ],
       ),
-      bottomNavigationBar:  BottomAppBar(
-        color: Colors.lightBlueAccent.withOpacity(0.7),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.grey.shade300,
+        elevation: 20,
         shape: const CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
         notchMargin: 11,
@@ -94,7 +95,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
             ),
           ),
           onPressed: () async {
-            final result = await Navigator.pushNamed(context, ProductCreateScreen.name);
+            final result =
+                await Navigator.pushNamed(context, ProductCreateScreen.name);
             if (result == true) {
               _getProductList();
             }
@@ -106,7 +108,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
         ),
       ),
-
     );
   }
 
