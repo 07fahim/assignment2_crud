@@ -43,15 +43,19 @@ class _ProductListScreenState extends State<ProductListScreen> {
         centerTitle: true,
         titleTextStyle: GoogleFonts.poppins(
             fontSize: 22, color: Colors.black, fontWeight: FontWeight.w500),
-        actions: [IconButton(onPressed: (){
-          _getProductList();
-        }, icon: const Icon(Icons.refresh_sharp))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                _getProductList();
+              },
+              icon: const Icon(Icons.refresh_sharp))
+        ],
       ),
       body: Stack(
         children: [
           ScreenBackground(context),
           RefreshIndicator(
-            onRefresh: () async{
+            onRefresh: () async {
               _getProductList();
             },
             child: Visibility(
@@ -63,31 +67,46 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 padding: const EdgeInsets.all(16),
                 itemCount: productList.length,
                 itemBuilder: (context, index) {
-                  return ProductItem(product: productList[index], onRefresh:_getProductList);
+                  return ProductItem(
+                      product: productList[index], onRefresh: _getProductList);
                 },
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: const BottomAppBar(
-        color: colorBlue,
-        shape: CircularNotchedRectangle(),
+      bottomNavigationBar:  BottomAppBar(
+        color: Colors.lightBlueAccent.withOpacity(0.7),
+        shape: const CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
-        notchMargin: 10,
+        notchMargin: 11,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: colorWhite,
-        shape: const CircleBorder(),
-        onPressed: () async {  // Make this async
-          final result = await Navigator.pushNamed(context, ProductCreateScreen.name);
-          if (result == true) {
-            _getProductList();
-          }
-        },
-        child:Image.asset("assets/images/shopping-cart.png",fit: BoxFit.contain,width: 40,),
+      floatingActionButton: SizedBox(
+        height: 70,
+        width: 70,
+        child: FloatingActionButton(
+          backgroundColor: colorWhite,
+          shape: const CircleBorder(
+            side: BorderSide(
+              color: Colors.transparent,
+              width: 10, // Keep border width if needed
+            ),
+          ),
+          onPressed: () async {
+            final result = await Navigator.pushNamed(context, ProductCreateScreen.name);
+            if (result == true) {
+              _getProductList();
+            }
+          },
+          child: Image.asset(
+            "assets/images/shopping-cart.png",
+            fit: BoxFit.contain,
+            width: 40,
+          ),
+        ),
       ),
+
     );
   }
 
@@ -119,5 +138,4 @@ class _ProductListScreenState extends State<ProductListScreen> {
     _getProductListInProgress = false;
     setState(() {});
   }
-
 }
