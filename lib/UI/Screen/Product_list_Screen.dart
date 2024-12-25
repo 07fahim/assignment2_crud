@@ -9,7 +9,7 @@ import 'package:http/http.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductListScreen extends StatefulWidget {
-  const ProductListScreen({super.key});
+  const ProductListScreen({super.key, required bool isDarkMode, required void Function() onThemeToggle});
 
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();

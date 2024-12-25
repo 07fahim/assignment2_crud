@@ -24,33 +24,52 @@ ScreenBackground(context) {
   );
 }
 
-InputDecoration AddInputDecoration(label) {
+InputDecoration AddInputDecoration(String label, bool isDarkMode) {
   return InputDecoration(
-    border:OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: colorBlue, width: 2)),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(
+        color: isDarkMode ? darkCardColor : colorBlue,
+        width: 2,
+      ),
+    ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: colorWhite, width: 0),
+      borderSide: BorderSide(
+        color: isDarkMode ? darkCardColor : colorWhite,
+        width: 0,
+      ),
     ),
     focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: colorBlue, width: 2)),
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(
+        color: isDarkMode ? darkTextColor : colorBlue,
+        width: 2,
+      ),
+    ),
     labelText: label,
-    labelStyle: GoogleFonts.merriweather(color: colorGrey, fontSize: 20),
-    fillColor: Colors.white,
+    labelStyle: GoogleFonts.merriweather(
+      color: isDarkMode ? darkIconColor : colorGrey,
+      fontSize: 20,
+    ),
+    fillColor: isDarkMode ? darkCardColor : Colors.white,
     filled: true,
     contentPadding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
     hintText: label,
-    hintStyle: GoogleFonts.merriweather(color: colorBlue),
+    hintStyle: GoogleFonts.merriweather(
+      color: isDarkMode ? darkIconColor : colorBlue,
+    ),
   );
 }
 
-DecoratedBox AppDropDownStyle(child) {
+DecoratedBox AppDropDownStyle(Widget child, bool isDarkMode) {
   return DecoratedBox(
     decoration: BoxDecoration(
-      color: colorWhite,
-      border: Border.all(color: colorWhite, width: 2),
+      color: isDarkMode ? darkCardColor : colorWhite,
+      border: Border.all(
+        color: isDarkMode ? darkCardColor : colorWhite,
+        width: 2,
+      ),
       borderRadius: BorderRadius.circular(4),
     ),
     child: Padding(
@@ -60,12 +79,15 @@ DecoratedBox AppDropDownStyle(child) {
   );
 }
 
-ButtonStyle AppButtonStyle() {
+ButtonStyle AppButtonStyle(bool isDarkMode) {
   return ElevatedButton.styleFrom(
-      backgroundColor: Colors.transparent,
-      elevation: 1,
-      padding: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)));
+    backgroundColor: isDarkMode ? darkCardColor : Colors.transparent,
+    elevation: 1,
+    padding: const EdgeInsets.all(0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(6),
+    ),
+  );
 }
 
 Ink EleButtonChild(ButtonText) {

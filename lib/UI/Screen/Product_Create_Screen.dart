@@ -5,7 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 
 class ProductCreateScreen extends StatefulWidget {
-  const ProductCreateScreen({super.key});
+  final bool isDarkMode;
+  const ProductCreateScreen({super.key, required this.isDarkMode});
 
   static const String name = '/create-product';
 
@@ -63,7 +64,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           content: TextField(
             controller: _customQtyController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Enter quantity"),
+            decoration: AddInputDecoration("Enter quantity",widget.isDarkMode),
           ),
           actions: [
             TextButton(
@@ -105,23 +106,28 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.isDarkMode ? darkBackgroundColor : Colors.white,
       appBar: AppBar(
-        backgroundColor: colorWhite,
+        backgroundColor: widget.isDarkMode ? darkCardColor : colorWhite,
         title: Text(
           "Create Product",
-          style: GoogleFonts.lato(fontSize: 28, fontWeight: FontWeight.w400),
+          style: GoogleFonts.lato(
+            fontSize: 28,
+            fontWeight: FontWeight.w400,
+            color: widget.isDarkMode ? darkTextColor : Colors.black,
+          ),
         ),
         centerTitle: true,
       ),
       body: Stack(
         children: [
-          ScreenBackground(context),
-          Container(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(30),
-              child: _buildProductForm(),
-            ),
-          )
+          widget.isDarkMode
+              ? Container(color: darkBackgroundColor)
+              : ScreenBackground(context),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(30),
+            child: _buildProductForm(),
+          ),
         ],
       ),
     );
@@ -129,32 +135,48 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
 
   Widget _buildQuantityDropdown() {
     return AppDropDownStyle(
-      DropdownButton<String>(
-        style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20),
-        dropdownColor: colorWhite,
-        value: selectedQuantity,
-        hint: Text(
-            "Select QT",
-            style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20)
+        DropdownButton<String>(
+          style: GoogleFonts.merriweather(
+              color: widget.isDarkMode ? darkTextColor : colorGrey,
+              fontSize: 20
+          ),
+          dropdownColor: widget.isDarkMode ? darkCardColor : colorWhite,
+          value: selectedQuantity,
+          hint: Text(
+              "Select QT",
+              style: GoogleFonts.merriweather(
+                  color: widget.isDarkMode ? darkIconColor : colorGrey,
+                  fontSize: 20
+              )
+          ),
+          items: quantityItems.map((String qty) {
+            return DropdownMenuItem(
+              value: qty,
+              child: Text(
+                qty,
+                style: TextStyle(
+                    color: widget.isDarkMode ? darkTextColor : colorGrey
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: _createProductInProgress ? null : (value) {
+            setState(() {
+              if (value == "custom") {
+                _showCustomQuantityDialog();
+              } else {
+                selectedQuantity = value;
+              }
+            });
+          },
+          isExpanded: true,
+          underline: Container(),
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: widget.isDarkMode ? darkIconColor : colorGrey,
+          ),
         ),
-        items: quantityItems.map((String qty) {
-          return DropdownMenuItem(
-            value: qty,
-            child: Text(qty),
-          );
-        }).toList(),
-        onChanged: _createProductInProgress ? null : (value) {
-          setState(() {
-            if (value == "custom") {
-              _showCustomQuantityDialog();
-            } else {
-              selectedQuantity = value;
-            }
-          });
-        },
-        isExpanded: true,
-        underline: Container(),
-      ),
+        widget.isDarkMode
     );
   }
 
@@ -164,9 +186,12 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       child: Column(
         children: [
           TextFormField(
-            style: GoogleFonts.roboto(fontSize: 22),
+            style: GoogleFonts.roboto(
+              fontSize: 22,
+              color: widget.isDarkMode ? darkTextColor : Colors.black,
+            ),
             controller: _nameTEController,
-            decoration: AddInputDecoration("Product Name"),
+            decoration: AddInputDecoration("Product Name", widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product name";
@@ -178,7 +203,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           TextFormField(
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _codeTEController,
-            decoration: AddInputDecoration("Product Code"),
+            decoration: AddInputDecoration("Product Code",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product code";
@@ -190,7 +215,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
           TextFormField(
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _imageTEController,
-            decoration: AddInputDecoration("Product Image"),
+            decoration: AddInputDecoration("Product Image",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product image";
@@ -203,7 +228,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _priceTEController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Unit Price"),
+            decoration: AddInputDecoration("Unit Price",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter unit price";
@@ -219,7 +244,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _totalPriceTEController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Total Price"),
+            decoration: AddInputDecoration("Total Price",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter total price";
@@ -241,7 +266,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
                 child: CircularProgressIndicator(),
               ),
               child: ElevatedButton(
-                style: AppButtonStyle(),
+                style: AppButtonStyle(widget.isDarkMode),
                 onPressed: () {
                   if (!_formKey.currentState!.validate()) {
                     return;

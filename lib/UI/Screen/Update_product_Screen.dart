@@ -8,7 +8,8 @@ import 'package:http/http.dart';
 import '../Style/style.dart';
 
 class UpdateProductScreen extends StatefulWidget {
-  const UpdateProductScreen({super.key, required this.product});
+  final bool isDarkMode;
+  const UpdateProductScreen({super.key, required this.product, required this.isDarkMode});
 
   static const String name = '/update-product';
 
@@ -93,7 +94,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
           content: TextField(
             controller: _customQtyController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Enter quantity"),
+            decoration: AddInputDecoration("Enter quantity",widget.isDarkMode),
           ),
           actions: [
             TextButton(
@@ -159,32 +160,48 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
 
   Widget _buildQuantityDropdown() {
     return AppDropDownStyle(
-      DropdownButton<String>(
-        style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20),
-        dropdownColor: colorWhite,
-        value: selectedQuantity,
-        hint: Text(
-            "Select QT",
-            style: GoogleFonts.merriweather(color: colorGrey, fontSize: 20)
+        DropdownButton<String>(
+          style: GoogleFonts.merriweather(
+              color: widget.isDarkMode ? darkTextColor : colorGrey,
+              fontSize: 20
+          ),
+          dropdownColor: widget.isDarkMode ? darkCardColor : colorWhite,
+          value: selectedQuantity,
+          hint: Text(
+              "Select QT",
+              style: GoogleFonts.merriweather(
+                  color: widget.isDarkMode ? darkIconColor : colorGrey,
+                  fontSize: 20
+              )
+          ),
+          items: quantityItems.map((String qty) {
+            return DropdownMenuItem(
+              value: qty,
+              child: Text(
+                qty,
+                style: TextStyle(
+                    color: widget.isDarkMode ? darkTextColor : colorGrey
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: _updateProductInProgress ? null : (value) {
+            setState(() {
+              if (value == "custom") {
+                _showCustomQuantityDialog();
+              } else {
+                selectedQuantity = value;
+              }
+            });
+          },
+          isExpanded: true,
+          underline: Container(),
+          icon: Icon(
+            Icons.arrow_drop_down,
+            color: widget.isDarkMode ? darkIconColor : colorGrey,
+          ),
         ),
-        items: quantityItems.map((String qty) {
-          return DropdownMenuItem(
-            value: qty,
-            child: Text(qty),
-          );
-        }).toList(),
-        onChanged: _updateProductInProgress ? null : (value) {
-          setState(() {
-            if (value == "custom") {
-              _showCustomQuantityDialog();
-            } else {
-              selectedQuantity = value;
-            }
-          });
-        },
-        isExpanded: true,
-        underline: Container(),
-      ),
+        widget.isDarkMode
     );
   }
 
@@ -196,7 +213,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
           TextFormField(
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _nameTEController,
-            decoration: AddInputDecoration("Product Name"),
+            decoration: AddInputDecoration("Product Name",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product name";
@@ -208,7 +225,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
           TextFormField(
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _codeTEController,
-            decoration: AddInputDecoration("Product Code"),
+            decoration: AddInputDecoration("Product Code",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product code";
@@ -220,7 +237,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
           TextFormField(
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _imageTEController,
-            decoration: AddInputDecoration("Product Image"),
+            decoration: AddInputDecoration("Product Image",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter product image";
@@ -233,7 +250,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _priceTEController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Unit Price"),
+            decoration: AddInputDecoration("Unit Price",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter unit price";
@@ -249,7 +266,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
             style: GoogleFonts.roboto(fontSize: 22),
             controller: _totalPriceTEController,
             keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Total Price"),
+            decoration: AddInputDecoration("Total Price",widget.isDarkMode),
             validator: (String? value) {
               if (value?.trim().isEmpty ?? true) {
                 return "Enter total price";
@@ -271,7 +288,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                 child: CircularProgressIndicator(),
               ),
               child: ElevatedButton(
-                style: AppButtonStyle(),
+                style: AppButtonStyle(widget.isDarkMode),
                 onPressed: () {
                   if (!_formKey.currentState!.validate()) {
                     return;
