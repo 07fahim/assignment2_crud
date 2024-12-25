@@ -32,7 +32,7 @@ class ProductItem extends StatelessWidget {
               height: 60,
               errorBuilder: (context, error, stackTrace) => Icon(
                 Icons.image_not_supported,
-                size: 60,
+                size: 80,
                 color: isDarkMode ? darkIconColor : Colors.grey,
               ),
             ),
