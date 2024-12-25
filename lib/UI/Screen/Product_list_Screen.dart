@@ -71,21 +71,22 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ],
       ),
       bottomNavigationBar: const BottomAppBar(
+        color: colorBlue,
         shape: CircularNotchedRectangle(),
         clipBehavior: Clip.antiAlias,
         notchMargin: 10,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: colorBlue,
+        backgroundColor: colorWhite,
         shape: const CircleBorder(),
         onPressed: () async {  // Make this async
           final result = await Navigator.pushNamed(context, ProductCreateScreen.name);
-          if (result == true) {  // Check if product was created successfully
-            _getProductList();  // Refresh the list
+          if (result == true) {
+            _getProductList();
           }
         },
-        child: const Icon(Icons.add, color: colorDarkBlue),
+        child:Image.asset("assets/images/shopping-cart.png",fit: BoxFit.contain,width: 40,),
       ),
     );
   }
