@@ -7,7 +7,7 @@ import '../UI/Screen/Update_product_Screen.dart';
 import '../models/product.dart';
 
 class ProductItem extends StatelessWidget {
-   ProductItem({super.key, required this.product, required this.onRefresh,});
+   const ProductItem({super.key, required this.product, required this.onRefresh,});
 
   final Product product;
    final Function() onRefresh;
