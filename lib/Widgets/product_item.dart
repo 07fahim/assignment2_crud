@@ -106,28 +106,28 @@ class ProductItem extends StatelessWidget {
                     'Product Code: ${product.productCode ?? 'Unknown'}',
                     style: TextStyle(
                       color: isDarkMode ? darkIconColor : Colors.grey,
-                      fontStyle: FontStyle.italic,
+
                     ),
                   ),
                   Text(
                     'Quantity: ${product.quantity ?? 'Unknown'}',
                     style: TextStyle(
                       color: isDarkMode ? darkIconColor : Colors.grey,
-                      fontStyle: FontStyle.italic,
+
                     ),
                   ),
                   Text(
-                    'Price: ${product.unitPrice ?? 'Unknown'}',
+                    'Price: Tk ${product.unitPrice ?? 'Unknown'}',
                     style: TextStyle(
                       color: isDarkMode ? darkIconColor : Colors.grey,
-                      fontStyle: FontStyle.italic,
+
                     ),
                   ),
                   Text(
-                    'Total Price: ${product.totalPrice ?? 'Unknown'}',
+                    'Total Price: Tk ${product.totalPrice ?? 'Unknown'}',
                     style: TextStyle(
                       color: isDarkMode ? Colors.blueGrey : Colors.deepOrangeAccent,
-                      fontStyle: FontStyle.italic,
+
                     ),
                   ),
                 ],

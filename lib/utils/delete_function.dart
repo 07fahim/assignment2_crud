@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class DeleteFunction {
@@ -32,9 +33,12 @@ class DeleteFunction {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
+          title: Text(
             'Are you sure? Will you delete this product?',
-            style: TextStyle(fontSize: 16),
+            style: GoogleFonts.aBeeZee(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           content: Container(
             decoration: BoxDecoration(
@@ -60,10 +64,10 @@ class DeleteFunction {
                     Expanded(
                       child: Text(
                         productName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+                          style: GoogleFonts.aBeeZee(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
                       ),
                     ),
                   ],
