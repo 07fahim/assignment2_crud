@@ -14,27 +14,22 @@ const darkTextColor = Color.fromRGBO(255, 255, 255, 0.87);
 const darkIconColor = Color.fromRGBO(255, 255, 255, 0.6);
 
 Widget ScreenBackground(BuildContext context, bool isDarkMode) {
-  print('ScreenBackground called with isDarkMode: $isDarkMode'); // Debug log
-
-  return Stack(
-    children: [
-      // Base background color
-      Container(
-        color: isDarkMode ? darkBackgroundColor : Colors.white,
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-      ),
-      // SVG overlay
-      SvgPicture.asset(
-        isDarkMode
-            ? "assets/images/dark-waves.svg"
-            : "assets/images/SVG_Background.svg",
-        alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        fit: BoxFit.cover,
-      ),
-    ],
+  return Container(
+    color: isDarkMode ? darkBackgroundColor : Colors.white,
+    height: MediaQuery.of(context).size.height,
+    width: MediaQuery.of(context).size.width,
+    child: SvgPicture.asset(
+      isDarkMode
+          ? "assets/images/dark-waves.svg"
+          : "assets/images/SVG_Background.svg",
+      alignment: Alignment.center,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      fit: BoxFit.cover,
+      colorFilter: isDarkMode
+          ? const ColorFilter.mode(darkBackgroundColor, BlendMode.srcIn)
+          : null,
+    ),
   );
 }
 
@@ -117,7 +112,7 @@ Ink EleButtonChild(String ButtonText, {bool isDarkMode = false}) {
         ButtonText,
         style: GoogleFonts.firaSans(
           fontSize: 24,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           color: isDarkMode ? darkTextColor : colorWhite,
         ),
       ),

@@ -142,7 +142,7 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
         backgroundColor: widget.isDarkMode ? darkCardColor : colorWhite,
         title: Text(
           "Update Product",  // or "Update Product" for UpdateProductScreen
-          style: GoogleFonts.lato(
+          style: GoogleFonts.poppins(
             fontSize: 28,
             fontWeight: FontWeight.w400,
             color: widget.isDarkMode ? darkTextColor : Colors.black,

@@ -1,9 +1,10 @@
-import 'package:assignment2_crud/UI/Screen/Update_product_Screen.dart';
-import 'package:assignment2_crud/UI/Style/style.dart';
-import 'package:assignment2_crud/utils/delete_function.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:assignment2_crud/models/product.dart';
+import 'package:assignment2_crud/utils/delete_function.dart';
+import 'package:assignment2_crud/UI/Screen/Update_product_Screen.dart';
+
+import '../UI/Style/style.dart';
 
 class ProductItem extends StatelessWidget {
   const ProductItem({
@@ -17,6 +18,49 @@ class ProductItem extends StatelessWidget {
   final Function() onRefresh;
   final bool isDarkMode;
 
+  void _showFullScreenImage(BuildContext context, String imageUrl) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          backgroundColor: Colors.black,
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            iconTheme: const IconThemeData(color: Colors.white),
+          ),
+          body: Center(
+            child: InteractiveViewer(
+              panEnabled: true,
+              boundaryMargin: const EdgeInsets.all(20),
+              minScale: 0.5,
+              maxScale: 4,
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.contain,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                          : null,
+                      color: Colors.white,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.image_not_supported,
+                  size: 100,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -26,16 +70,24 @@ class ProductItem extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            Image.network(
-              product.image ?? 'Unknown',
-              width: 60,
-              height: 60,
-              errorBuilder: (context, error, stackTrace) => Icon(
-                Icons.image_not_supported,
-                size: 80,
-                color: isDarkMode ? darkIconColor : Colors.grey,
+            GestureDetector(
+              onTap: () {
+                if (product.image != null) {
+                  _showFullScreenImage(context, product.image!);
+                }
+              },
+              child: Image.network(
+                product.image ?? 'Unknown',
+                width: 100,
+                height: 100,
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.image_not_supported,
+                  size: 100,
+                  color: isDarkMode ? darkIconColor : Colors.grey,
+                ),
               ),
             ),
+            // Rest of your existing widget code remains the same
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -119,7 +171,7 @@ class ProductItem extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: isDarkMode ? darkCardColor : Colors.lightBlueAccent,
+                    color: isDarkMode ? Colors.blueGrey : Colors.lightBlueAccent,
                     borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(8),
                       bottomRight: Radius.circular(8),
