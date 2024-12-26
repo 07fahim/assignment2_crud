@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,15 +13,28 @@ const darkCardColor = Color.fromRGBO(66, 66, 66, 1);
 const darkTextColor = Color.fromRGBO(255, 255, 255, 0.87);
 const darkIconColor = Color.fromRGBO(255, 255, 255, 0.6);
 
-ScreenBackground(BuildContext context, bool isDarkMode) {
-  return SvgPicture.asset(
-    isDarkMode
-        ? "assets/images/SVG_Background_dark.svg"  // Dark mode SVG
-        : "assets/images/SVG_Background.svg",      // Light mode SVG
-    alignment: Alignment.center,
-    height: MediaQuery.of(context).size.height,
-    width: MediaQuery.of(context).size.width,
-    fit: BoxFit.cover,
+Widget ScreenBackground(BuildContext context, bool isDarkMode) {
+  print('ScreenBackground called with isDarkMode: $isDarkMode'); // Debug log
+
+  return Stack(
+    children: [
+      // Base background color
+      Container(
+        color: isDarkMode ? darkBackgroundColor : Colors.white,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+      ),
+      // SVG overlay
+      SvgPicture.asset(
+        isDarkMode
+            ? "assets/images/dark-waves.svg"
+            : "assets/images/SVG_Background.svg",
+        alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.cover,
+      ),
+    ],
   );
 }
 
