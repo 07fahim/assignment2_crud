@@ -57,48 +57,95 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Enter Custom Quantity',
-            style: GoogleFonts.roboto(fontSize: 20),
-          ),
-          content: TextField(
-            controller: _customQtyController,
-            keyboardType: TextInputType.number,
-            decoration: AddInputDecoration("Enter quantity",widget.isDarkMode),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {
-                  selectedQuantity = null;
-                });
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (_customQtyController.text.isNotEmpty) {
-                  final quantity = int.tryParse(_customQtyController.text);
-                  if (quantity != null && quantity > 0) {
-                    setState(() {
-                      String newQuantity = "${_customQtyController.text} piece";
-                      if (!quantityItems.contains(newQuantity)) {
-                        quantityItems.add(newQuantity);
+        String? errorText;
+        return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                backgroundColor: widget.isDarkMode ? darkCardColor : Colors.white,
+                title: Text(
+                  'Enter Custom Quantity',
+                  style: GoogleFonts.roboto(
+                    fontSize: 20,
+                    color: widget.isDarkMode ? darkTextColor : Colors.black,
+                  ),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: _customQtyController,
+                      keyboardType: TextInputType.number,
+                      decoration: AddInputDecoration("Enter quantity", widget.isDarkMode).copyWith(
+                        errorText: errorText,
+                        errorStyle: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 18,
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: widget.isDarkMode ? darkTextColor : Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      setState(() {
+                        selectedQuantity = null;
+                      });
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: widget.isDarkMode ? darkTextColor : colorDarkBlue,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: widget.isDarkMode ? darkCardColor : Colors.transparent,
+                      elevation: 1,
+                      padding: const EdgeInsets.all(0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        side: BorderSide(
+                          color: widget.isDarkMode ? darkTextColor : colorDarkBlue,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (_customQtyController.text.isEmpty) {
+                        setState(() {
+                          errorText = 'Enter quantity';
+                        });
+                        return;
                       }
-                      selectedQuantity = newQuantity;
-                      _customQtyController.clear();
-                    });
-                    Navigator.pop(context);
-                  } else {
-                    _showMessage('Please enter a valid quantity');
-                  }
-                }
-              },
-              child: const Text('Add'),
-            ),
-          ],
+                      final quantity = int.tryParse(_customQtyController.text);
+                      if (quantity != null && quantity > 0) {
+                        setState(() {
+                          String newQuantity = "${_customQtyController.text} piece";
+                          if (!quantityItems.contains(newQuantity)) {
+                            quantityItems.add(newQuantity);
+                          }
+                          selectedQuantity = newQuantity;
+                          _customQtyController.clear();
+                        });
+                        Navigator.pop(context);
+                      } else {
+                        setState(() {
+                          errorText = 'Enter valid quantity';
+                        });
+                      }
+                    },
+                    child: EleButtonChild("Add", isDarkMode: widget.isDarkMode),
+                  ),
+                ],
+              );
+            }
         );
       },
     );
@@ -121,7 +168,7 @@ class _ProductCreateScreenState extends State<ProductCreateScreen> {
         centerTitle: true,
         actions: [  // Add this actions list
           IconButton(
-            onPressed: widget.onThemeToggle,  // Use the callback directly
+            onPressed: widget.onThemeToggle,
             icon: Icon(
               widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
               color: widget.isDarkMode ? darkIconColor : Colors.black,
