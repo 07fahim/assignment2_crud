@@ -21,7 +21,7 @@ A Flutter application demonstrating CRUD operations with REST API integration an
 ## Getting Started
 
 1. Clone repository:
-```git clone https://github.com/yourusername/flutter-product-crud.git```
+```gh repo clone 07fahim/assignment2_crud```
 
 2. Install dependencies:
 ```flutter pub get```
