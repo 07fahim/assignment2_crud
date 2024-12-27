@@ -87,7 +87,6 @@ class ProductItem extends StatelessWidget {
                 ),
               ),
             ),
-            // Rest of your existing widget code remains the same
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -159,6 +158,7 @@ class ProductItem extends StatelessWidget {
                         totalPrice: product.totalPrice?.toString() ?? 'Unknown',
                         imageUrl: product.image,
                         onDeleteSuccess: onRefresh,
+                        isDarkMode: isDarkMode,
                       );
                     },
                     icon: Icon(
