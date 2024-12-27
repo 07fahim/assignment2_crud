@@ -35,7 +35,7 @@ A Flutter application demonstrating CRUD operations with REST API integration an
 - Custom UI components
 - Proper disposal of controllers
 ## CRUD APP
-https://github.com/user-attachments/assets/4409f3e9-dc5e-4bd7-b439-d3264673d8a6
+[https://github.com/user-attachments/assets/4409f3e9-dc5e-4bd7-b439-d3264673d8a6](https://github.com/user-attachments/assets/f33b1c9d-9497-45d1-9369-6c270b82c54e)
 
 
 
