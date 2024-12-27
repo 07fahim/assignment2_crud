@@ -1,6 +1,39 @@
-# assignment2_crud
+# Flutter Product Management App with REST API
 
-A new Flutter project.
+A Flutter application demonstrating CRUD operations with REST API integration and dark/light theme support.
+
+## Features
+- Product listing with search and filter
+- Add/Edit/Delete product functionality 
+- Dark/Light theme toggle
+- Interactive product image viewer
+- Custom quantity selector
+- Form validation
+- Loading states & error handling
+- Responsive design
+
+## Tech Stack
+- Flutter/Dart
+- HTTP package for API calls
+- Google Fonts
+- Flutter SVG
+
+## Getting Started
+
+1. Clone repository:
+```git clone https://github.com/yourusername/flutter-product-crud.git```
+
+2. Install dependencies:
+```flutter pub get```
+
+3. Run app:
+```flutter run```
+
+## Architecture
+- REST API integration 
+- State management with setState
+- Custom UI components
+- Proper disposal of controllers
 ## CRUD APP
 https://github.com/user-attachments/assets/4409f3e9-dc5e-4bd7-b439-d3264673d8a6
 
